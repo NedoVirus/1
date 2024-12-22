@@ -20,6 +20,15 @@
             overflow: hidden;
         }
 
+        body, h1, #countdown, .time-box, label, a {
+            user-select: none; /* Запрет на выделение текста */
+        }
+
+        img {
+            user-select: none; /* Запрет на выделение изображений */
+            pointer-events: none; /* Запрет на перетаскивание изображений */
+        }
+
         h1 {
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             font-size: 2rem;
