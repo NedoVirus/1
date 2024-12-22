@@ -21,12 +21,12 @@
         }
 
         body, h1, #countdown, .time-box, label, a {
-            user-select: none; /* Запрет на выделение текста */
+            user-select: none;
         }
 
         img {
-            user-select: none; /* Запрет на выделение изображений */
-            pointer-events: none; /* Запрет на перетаскивание изображений */
+            user-select: none;
+            pointer-events: none;
         }
 
         h1 {
@@ -87,6 +87,50 @@
             z-index: -1;
         }
 
+        .image-animation {
+            position: fixed;
+            bottom: -50px; /* Начальная позиция ниже экрана */
+            left: 50%;
+            transform: translateX(-50%);
+            animation: slideUp 0.5s ease-in-out forwards;
+        }
+
+        @keyframes slideUp {
+            0% {
+                bottom: -50px; /* Исходная позиция */
+            }
+            10% {
+                bottom: -40px; /* Исходная позиция */
+            }
+            20% {
+                bottom: -30px; /* Исходная позиция */
+            }
+            30% {
+                bottom: -20px; /* Исходная позиция */
+            }
+            40% {
+                bottom: -10px; /* Исходная позиция */
+            }
+            50% {
+                bottom: 0px; /* Конечная позиция */
+            }
+            60% {
+                bottom: -10px; /* Конечная позиция */
+            }
+            70% {
+                bottom: -20px; /* Конечная позиция */
+            }
+            80% {
+                bottom: -30px; /* Конечная позиция */
+            }
+            90% {
+                bottom: -40px; /* Конечная позиция */
+            }
+            100% {
+                bottom: -50px; /* Исчезает */
+            }
+        }
+
         @media (max-width: 480px) {
             h1 {
                 font-size: 1.2rem;
@@ -127,14 +171,13 @@
         }
 
         #countdown h2 {
-        font-size: 2rem;
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        text-align: center;
-        margin: 0;
-        padding: 20px;
-}
-
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -221,33 +264,32 @@
         }
 
         function updateCountdown() {
-    const now = new Date();
-    const nextYear = new Date(2025, 0, 1); // 1 января 2025 года
-    const diff = nextYear - now;
+            const now = new Date();
+            const nextYear = new Date(2025, 0, 1); // 1 января 2025 года
+            const diff = nextYear - now;
 
-    if (diff <= 0) {
-        titleElement.textContent = "С НОВЫМ 2025 ГОДОМ!";
-        document.getElementById('countdown').innerHTML = `<h2>${greetings[Math.floor(Math.random() * greetings.length)]}</h2>`;
-        clearInterval(timer);
-        return;
-    }
+            if (diff <= 0) {
+                titleElement.textContent = "С НОВЫМ 2025 ГОДОМ!";
+                document.getElementById('countdown').innerHTML = `<h2>${greetings[Math.floor(Math.random() * greetings.length)]}</h2>`;
+                clearInterval(timer);
+                return;
+            }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
 
-    daysElement.textContent = days;
-    hoursElement.textContent = hours;
-    minutesElement.textContent = minutes;
-    secondsElement.textContent = seconds;
+            daysElement.textContent = days;
+            hoursElement.textContent = hours;
+            minutesElement.textContent = minutes;
+            secondsElement.textContent = seconds;
 
-    daysLabel.textContent = getDeclension(days, 'День', 'Дня', 'Дней');
-    hoursLabel.textContent = getDeclension(hours, 'Час', 'Часа', 'Часов');
-    minutesLabel.textContent = getDeclension(minutes, 'Минута', 'Минуты', 'Минут');
-    secondsLabel.textContent = getDeclension(seconds, 'Секунда', 'Секунды', 'Секунд');
-}
-
+            daysLabel.textContent = getDeclension(days, 'День', 'Дня', 'Дней');
+            hoursLabel.textContent = getDeclension(hours, 'Час', 'Часа', 'Часов');
+            minutesLabel.textContent = getDeclension(minutes, 'Минута', 'Минуты', 'Минут');
+            secondsLabel.textContent = getDeclension(seconds, 'Секунда', 'Секунды', 'Секунд');
+        }
 
         const timer = setInterval(updateCountdown, 1000);
         updateCountdown();
@@ -296,6 +338,21 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
+
+        // Display image every 15 seconds
+        setInterval(() => {
+            const img = document.createElement('img');
+            img.src = '5.png';
+            img.classList.add('image-animation');
+            img.style.width = '80px';  /* Размер изображения */
+            img.style.height = '80px'; /* Размер изображения */
+            document.body.appendChild(img);
+
+            // Remove the image after animation
+            setTimeout(() => {
+                img.remove();
+            }, 2000);
+        }, 5000);
     </script>
 </body>
 </html>
