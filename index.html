@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отсчёт до Нового Года!</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background: url('https://i.pinimg.com/originals/5d/7e/dd/5d7eddc21d7b5941c7a72e9ed9e26e43.jpg') no-repeat center center/cover;
+            background-size: 120% 100%;
+            color: white;
+            overflow: hidden;
+        }
+        
+        h1, h2 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #author {
+            margin: 70px;
+            opacity: 0.2;
+            text-decoration: none;
+            color: white;
+            font-size: 15px;
+        }
+
+        #countdown {
+            font-size: 3rem;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            #countdown {
+                font-size: 1rem;
+            }
+
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #countdown {
+                font-size: 1.1rem;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <h1 id="title">До Нового Года:</h1>
+    <div id="countdown">00:00:00</div>
+    <a href="https://t.me/MaksikTuTaaa" id="author">&copy Сайт сделал - МаксикТuТааа</a>
+    <canvas id="particles"></canvas>
+
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        const titleElement = document.getElementById('title');
+
+        const greetings = [
+            "Желаю счастья и удачи!",
+            "Пусть Новый год принесёт много радости!",
+            "Счастливого Нового года! Пусть сбудутся мечты!",
+            "Здоровья, любви и счастья в Новом году!",
+            "Успехов и благополучия в 2025 году!",
+            "Счастья вашему дому в Новом году!",
+            "Пусть в 2025 году будет только хорошее!",
+            "Желаю светлых дней!",
+            "Желаю исполнения желаний в 2025!",
+            "Новых побед и радостных моментов в Новом году!",
+            "Пусть Новый год будет полон сюрпризов!",
+            "Пусть будет мир и тепло!",
+            "Пусть 2025 год принесёт успехи!",
+            "Желаю радости и доброты в Новом году!",
+            "С Новым 2025 годом! Счастья и здоровья!",
+            "Пусть каждый день в 2025 году будет счастливым!",
+            "Пусть сбудутся мечты!",
+            "Пусть 2025 год принесёт радость!",
+            "Желаю исполнения заветных желаний!",
+            "Пусть вас ждёт только доброе!",
+            "Мира, радости и счастья в Новом году!",
+            "Желаю здоровья и удачи в 2025 году!",
+            "Пусть всё получится!",
+            "Новых свершений в Новом году!",
+            "Желаю благополучия и счастья в 2025!",
+            "Пусть этот год будет лучшим!",
+            "Счастливого Нового года!",
+            "Пусть 2025 год будет наполнен улыбками!",
+            "Будьте счастливы!"
+        ];
+
+        function getDeclension(number, one, two, five) {
+            if (number % 10 === 1 && number % 100 !== 11) {
+                return one;
+            } else if (number % 10 >= 2 && number % 10 <= 4 && (number % 100 < 10 || number % 100 >= 20)) {
+                return two;
+            } else {
+                return five;
+            }
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const nextYear = new Date(2025, 0, 1); // 1 января 2025 года
+            const diff = nextYear - now;
+
+            if (diff <= 0) {
+                titleElement.textContent = "С НОВЫМ 2025 ГОДОМ!";
+                countdownElement.textContent = greetings[Math.floor(Math.random() * greetings.length)];
+                clearInterval(timer);
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            countdownElement.textContent = `${days} ${getDeclension(days, 'День', 'Дня', 'Дней')} ` +
+                `${hours} ${getDeclension(hours, 'Час', 'Часа', 'Часов')} ` +
+                `${minutes} ${getDeclension(minutes, 'Минута', 'Минуты', 'Минут')} ` +
+                `${seconds} ${getDeclension(seconds, 'Секунда', 'Секунды', 'Секунд')}`;
+        }
+
+        const timer = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Particles animation
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+
+        function createParticle() {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                speed: Math.random() * 2 + 1
+            });
+        }
+
+        for (let i = 0; i < 200; i++) {
+            createParticle();
+        }
+
+        function updateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.y += p.speed;
+                if (p.y > canvas.height) {
+                    p.y = -p.radius;
+                    p.x = Math.random() * canvas.width;
+                }
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fill();
+                ctx.closePath();
+            });
+            requestAnimationFrame(updateParticles);
+        }
+
+        updateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
