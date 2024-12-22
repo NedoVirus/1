@@ -37,6 +37,27 @@
             overflow: hidden;
         }
 
+        #easter-eggs-screen {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        #main-screen {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
         body, h1, #countdown, .time-box, label, a {
             user-select: none;
         }
@@ -87,11 +108,12 @@
 
         #author {
             font-style: italic;
-            margin: 70px;
+            /* margin: 70px; */
             opacity: 0.2;
             text-decoration: none;
-            color: white;
+            color: rgb(255, 255, 255);
             font-size: 15px;
+            margin-bottom: 180px;
         }
 
         #particles {
@@ -171,36 +193,105 @@
             margin: 0;
             padding: 20px;
         }
+
+        button {
+            background-color: hwb(0 69% 1% / 0.8);
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .input-container input {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 1rem;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .back-button {
+            bottom: 170px;
+            left: 60%;
+        }
+
+        .hidden {
+        display: none !important;
+        }
+
+
+        #easter-eggs-button {
+            position: absolute;
+            bottom: 220px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
     </style>
 </head>
 <body>
-    <h1 id="title">До Нового Года:</h1>
-    <div id="countdown">
-        <div class="time-box">
-            <img src="1.png" alt="">
-            <span id="days">0</span>
-            <label id="days-label">Дней</label>
-        </div>
-        <div class="time-box">
-            <img src="4.png" alt="">
-            <span id="hours">0</span>
-            <label id="hours-label">Часов</label>
-        </div>
-        <div class="time-box">
-            <img src="3.png" alt="">
-            <span id="minutes">0</span>
-            <label id="minutes-label">Минут</label>
-        </div>
-        <div class="time-box">
-            <img src="2.png" alt="">
-            <span id="seconds">0</span>
-            <label id="seconds-label">Секунд</label>
+    <div id="main-screen">
+        <h1 id="title">До Нового Года:</h1>
+        <div id="countdown">
+            <div class="time-box">
+                <img src="1.png" alt="">
+                <span id="days">0</span>
+                <label id="days-label">Дней</label>
+            </div>
+            <div class="time-box">
+                <img src="4.png" alt="">
+                <span id="hours">0</span>
+                <label id="hours-label">Часов</label>
+            </div>
+            <div class="time-box">
+                <img src="3.png" alt="">
+                <span id="minutes">0</span>
+                <label id="minutes-label">Минут</label>
+            </div>
+            <div class="time-box">
+                <img src="2.png" alt="">
+                <span id="seconds">0</span>
+                <label id="seconds-label">Секунд</label>
+            </div>
+            <button id="easter-eggs-button">Пасхалки</button>
         </div>
     </div>
+
+    <div id="easter-eggs-screen" class="hidden">
+        <h1>Пасхалки</h1>
+        <div class="input-container">
+            <input id="input-1" type="text" placeholder="1-ая Пасхалка" />
+            <input id="input-2" type="text" placeholder="2-ая Пасхалка" />
+            <input id="input-3" type="text" placeholder="3-ая Пасхалка" />
+            <!-- <input id="input-4" type="text" placeholder="4-ая Пасхалка" /> -->
+        </div>
+        <button class="back-button">Назад</button>
+    </div>
+
     <a href="https://t.me/MaksikTuTaaa" id="author">&copy Powered by МаксикТuТааа</a>
     <canvas id="particles"></canvas>
 
     <script>
+        const mainScreen = document.getElementById('main-screen');
+        const easterEggsScreen = document.getElementById('easter-eggs-screen');
+        const easterEggsButton = document.getElementById('easter-eggs-button');
+        const backButton = document.querySelector('.back-button');
         const daysElement = document.getElementById('days');
         const hoursElement = document.getElementById('hours');
         const minutesElement = document.getElementById('minutes');
@@ -245,6 +336,35 @@
             "Будьте счастливы!",
             "Пусть жизнь будет наполнена только позетивом и успехом. Удачи! (пасхалка)"
         ];
+
+        const inputs = [
+            document.getElementById('input-1'),
+            document.getElementById('input-2'),
+            document.getElementById('input-3')
+        ];
+
+        // Load saved inputs from localStorage
+        inputs.forEach((input, index) => {
+            const savedValue = localStorage.getItem(`input-${index + 1}`);
+            if (savedValue) {
+                input.value = savedValue;
+            }
+
+            // Save input value to localStorage on change
+            input.addEventListener('input', () => {
+                localStorage.setItem(`input-${index + 1}`, input.value);
+            });
+        });
+
+        easterEggsButton.addEventListener('click', () => {
+            mainScreen.classList.add('hidden');
+            easterEggsScreen.classList.remove('hidden');
+        });
+
+        backButton.addEventListener('click', () => {
+            easterEggsScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
 
         function getDeclension(number, one, two, five) {
             if (number % 10 === 1 && number % 100 !== 11) {
