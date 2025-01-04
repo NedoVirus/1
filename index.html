@@ -250,26 +250,26 @@
         <h1 id="title">До Нового Года:</h1>
         <div id="countdown">
             <div class="time-box">
-                <img src="1.png" alt="">
+<!--                 <img src="1.png" alt=""> -->
                 <span id="days">0</span>
                 <label id="days-label">Дней</label>
             </div>
             <div class="time-box">
-                <img src="4.png" alt="">
+<!--                 <img src="4.png" alt=""> -->
                 <span id="hours">0</span>
                 <label id="hours-label">Часов</label>
             </div>
             <div class="time-box">
-                <img src="3.png" alt="">
+<!--                 <img src="3.png" alt=""> -->
                 <span id="minutes">0</span>
                 <label id="minutes-label">Минут</label>
             </div>
             <div class="time-box">
-                <img src="2.png" alt="">
+<!--                 <img src="2.png" alt=""> -->
                 <span id="seconds">0</span>
                 <label id="seconds-label">Секунд</label>
             </div>
-            <button id="easter-eggs-button">Пасхалки</button>
+           <!-- <button id="easter-eggs-button">Пасхалки</button> -->
         </div>
     </div>
 
@@ -334,7 +334,7 @@
             "Счастливого Нового года!",
             "Пусть 2025 год будет наполнен улыбками!",
             "Будьте счастливы!",
-            "Пусть жизнь будет наполнена только позитивом и успехом. Удачи! (пасхалка)"
+            "Пусть жизнь будет наполнена только позитивом и успехом. Удачи!"
         ];
 
         const inputs = [
@@ -379,11 +379,11 @@
 
         function updateCountdown() {
             const now = new Date();
-            const nextYear = new Date(2025, 0, 1); // 1 января 2025 года
+            const nextYear = new Date(2026, 0, 1); // 1 января 2025 года
             const diff = nextYear - now;
 
             if (diff <= 0) {
-                titleElement.textContent = "С НОВЫМ 2025 ГОДОМ!";
+                titleElement.textContent = "С НОВЫМ 2026 ГОДОМ!";
                 document.getElementById('countdown').innerHTML = `<h2>${greetings[Math.floor(Math.random() * greetings.length)]}</h2>`;
                 clearInterval(timer);
                 return;
@@ -415,7 +415,7 @@
         canvas.height = window.innerHeight;
 
         const particleImage = new Image();
-        particleImage.src = '6.png';
+        particleImage.src = '7.png';
 
         const particles = [];
         const whiteDotCount = 100; // Number of white dots
