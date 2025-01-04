@@ -266,37 +266,7 @@
             "Пусть жизнь будет наполнена только позитивом и успехом. Удачи!"
         ];
 
-        const inputs = [
-            document.getElementById('input-1'),
-            document.getElementById('input-2'),
-            document.getElementById('input-3'),
-            document.getElementById('input-4')
-        ];
-
-        // Load saved inputs from localStorage
-        inputs.forEach((input, index) => {
-            const savedValue = localStorage.getItem(`input-${index + 1}`);
-            if (savedValue) {
-                input.value = savedValue;
-            }
-
-            // Save input value to localStorage on change
-            input.addEventListener('input', () => {
-                localStorage.setItem(`input-${index + 1}`, input.value);
-            });
-        });
-
-        easterEggsButton.addEventListener('click', () => {
-            mainScreen.classList.add('hidden');
-            easterEggsScreen.classList.remove('hidden');
-        });
-
-        backButton.addEventListener('click', () => {
-            easterEggsScreen.classList.add('hidden');
-            mainScreen.classList.remove('hidden');
-        });
-
-        function getDeclension(number, one, two, five) {
+           function getDeclension(number, one, two, five) {
             if (number % 10 === 1 && number % 100 !== 11) {
                 return one;
             } else if (number % 10 >= 2 && number % 10 <= 4 && (number % 100 < 10 || number % 100 >= 20)) {
