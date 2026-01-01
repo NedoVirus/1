@@ -49,10 +49,6 @@
             overflow: hidden;
         }
 
-        /* body, h1, #countdown, .time-box, label, a {
-            user-select: none;
-        } */
-
         img {
             user-select: none;
             pointer-events: none;
@@ -99,7 +95,6 @@
 
         #author {
             font-style: italic;
-            /* margin: 70px; */
             opacity: 0.2;
             text-decoration: none;
             color: rgb(255, 255, 255);
@@ -275,7 +270,7 @@
 
         function updateCountdown() {
             const now = new Date();
-            const nextYear = new Date(2027, 0, 1); // 1 января 2025 года
+            const nextYear = new Date(2027, 0, 1); // 1 января 2027 года
             const diff = nextYear - now;
 
             if (diff <= 0) {
@@ -304,81 +299,52 @@
         const timer = setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Particles animation with images and white dots
+        // Particles animation with white dots only
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        // const particleImage = new Image();
-        // particleImage.src = '6.png'; //6 png
-
         const particles = [];
-        const whiteDotCount = 100; // Number of white dots
-        const imageParticleCount = 1; // Number of image particles
-        const maxSpeed = 3; // Maximum speed of particles
+        const whiteDotCount = 100; // Количество белых точек
+        const maxSpeed = 3; // Максимальная скорость частиц
 
-        function createParticle(type) {
-            if (type === 'dot') {
-                // Create white dot
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    radius: Math.random() * 3 + 1, // Random radius between 1 and 4
-                    speed: Math.random() * maxSpeed + 1,
-                    type: 'dot' // Indicate it's a dot
-                });
-            } else if (type === 'image') {
-                // Create image particle
-                const size = 20; // Fixed size for image particles
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    width: size,
-                    height: size,
-                    speed: Math.random() * maxSpeed + 1,
-                    type: 'image' // Indicate it's an image
-                });
-            }
+        function createParticle() {
+            // Создание белых точек
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1, // Случайный радиус от 1 до 4
+                speed: Math.random() * maxSpeed + 1
+            });
         }
 
+        // Создаем только белые точки
         for (let i = 0; i < whiteDotCount; i++) {
-            createParticle('dot');
+            createParticle();
         }
 
-        for (let i = 0; i < imageParticleCount; i++) {
-            createParticle('image');
+        function updateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p) => {
+                p.y += p.speed;
+                if (p.y > canvas.height) {
+                    p.y = -p.radius;
+                    p.x = Math.random() * canvas.width;
+                }
+
+                // Рисуем белую точку
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fill();
+                ctx.closePath();
+            });
+            requestAnimationFrame(updateParticles);
         }
 
-        // function updateParticles() {
-        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //     particles.forEach((p) => {
-        //         p.y += p.speed;
-        //         if (p.y > canvas.height) {
-        //             if (p.type === 'dot') {
-        //                 p.y = -p.radius;
-        //             } else if (p.type === 'image') {
-        //                 p.y = -p.height;
-        //             }
-        //             p.x = Math.random() * canvas.width;
-        //         }
-
-        //         if (p.type === 'dot') {
-        //             // Draw white dot
-        //             ctx.beginPath();
-        //             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        //             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        //             ctx.fill();
-        //             ctx.closePath();
-        //         } else if (p.type === 'image') {
-        //             // Draw image particle
-        //             ctx.drawImage(particleImage, p.x, p.y, p.width, p.height);
-        //         }
-        //     });
-        //     requestAnimationFrame(updateParticles);
-        // }
-
-        particleImage.onload = updateParticles;
+        // Запускаем анимацию частиц
+        updateParticles();
 
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
@@ -388,6 +354,3 @@
     </script>
 </body>
 </html>
-
-
-
