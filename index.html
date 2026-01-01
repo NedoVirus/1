@@ -310,8 +310,8 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const particleImage = new Image();
-        particleImage.src = ''; //6 png
+        // const particleImage = new Image();
+        // particleImage.src = '6.png'; //6 png
 
         const particles = [];
         const whiteDotCount = 100; // Number of white dots
@@ -350,33 +350,33 @@
             createParticle('image');
         }
 
-        function updateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p) => {
-                p.y += p.speed;
-                if (p.y > canvas.height) {
-                    if (p.type === 'dot') {
-                        p.y = -p.radius;
-                    } else if (p.type === 'image') {
-                        p.y = -p.height;
-                    }
-                    p.x = Math.random() * canvas.width;
-                }
+        // function updateParticles() {
+        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //     particles.forEach((p) => {
+        //         p.y += p.speed;
+        //         if (p.y > canvas.height) {
+        //             if (p.type === 'dot') {
+        //                 p.y = -p.radius;
+        //             } else if (p.type === 'image') {
+        //                 p.y = -p.height;
+        //             }
+        //             p.x = Math.random() * canvas.width;
+        //         }
 
-                if (p.type === 'dot') {
-                    // Draw white dot
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                    ctx.fill();
-                    ctx.closePath();
-                } else if (p.type === 'image') {
-                    // Draw image particle
-                    ctx.drawImage(particleImage, p.x, p.y, p.width, p.height);
-                }
-            });
-            requestAnimationFrame(updateParticles);
-        }
+        //         if (p.type === 'dot') {
+        //             // Draw white dot
+        //             ctx.beginPath();
+        //             ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        //             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        //             ctx.fill();
+        //             ctx.closePath();
+        //         } else if (p.type === 'image') {
+        //             // Draw image particle
+        //             ctx.drawImage(particleImage, p.x, p.y, p.width, p.height);
+        //         }
+        //     });
+        //     requestAnimationFrame(updateParticles);
+        // }
 
         particleImage.onload = updateParticles;
 
@@ -388,5 +388,6 @@
     </script>
 </body>
 </html>
+
 
 
