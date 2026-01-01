@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обратный отсчёт до Нового года</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0c1e2f 0%, #0a2647 50%, #1a3a5f 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+            background: linear-gradient(to right, #f7ef8a, #ff9d00, #ff4d4d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .year-display {
+            margin: 2rem 0;
+            padding: 1rem;
+        }
+
+        .current-year, .next-year {
+            font-size: 4.5rem;
+            font-weight: 700;
+            display: inline-block;
+            margin: 0 1rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .current-year {
+            color: #4dabf7;
+        }
+
+        .next-year {
+            color: #ff9e00;
+            position: relative;
+        }
+
+        .next-year::after {
+            content: "🎉";
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        .countdown-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 3rem auto;
+            max-width: 900px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .countdown-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #a5d8ff;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            min-width: 140px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ffd166;
+            text-shadow: 0 0 10px rgba(255, 209, 102, 0.5);
+        }
+
+        .countdown-label {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #a5d8ff;
+        }
+
+        .progress-container {
+            margin-top: 2rem;
+        }
+
+        .progress-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #a5d8ff;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4dabf7, #339af0, #228be6);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .message {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            line-height: 1.6;
+            color: #ffd166;
+        }
+
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            color: #aaa;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auto-update-note {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .auto-update-note i {
+            color: #00d4ff;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .current-year, .next-year { font-size: 3.5rem; }
+            .countdown-item { min-width: 110px; padding: 1rem 0.5rem; }
+            .countdown-value { font-size: 2.5rem; }
+            .countdown-label { font-size: 0.9rem; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 1rem; }
+            .countdown { gap: 0.8rem; }
+            .countdown-item { min-width: 80px; }
+            .countdown-value { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="fireworks" id="fireworks"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Обратный отсчёт до Нового года</h1>
+            <p class="subtitle">Встречайте Новый год вместе с нами! Этот счётчик автоматически обновляется каждый год, так что вам не нужно его настраивать заново.</p>
+        </header>
+        
+        <div class="year-display">
+            <span class="current-year" id="current-year">2023</span>
+            <i class="fas fa-arrow-right" style="font-size: 2.5rem; color: #ff9e00; vertical-align: middle;"></i>
+            <span class="next-year" id="next-year">2024</span>
+        </div>
+        
+        <div class="countdown-container">
+            <h2 class="countdown-title">До Нового года осталось:</h2>
+            
+            <div class="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-value" id="days">00</span>
+                    <span class="countdown-label">Дней</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="hours">00</span>
+                    <span class="countdown-label">Часов</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="minutes">00</span>
+                    <span class="countdown-label">Минут</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="seconds">00</span>
+                    <span class="countdown-label">Секунд</span>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-title">Прогресс года</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="year-progress"></div>
+                </div>
+                <div class="progress-text" id="progress-text">Завершено 0% года</div>
+            </div>
+            
+            <div class="message" id="message">
+                Скоро наступит волшебное время! Готовьтесь к празднованию!
+            </div>
+        </div>
+        
+        <div class="auto-update-note">
+            <i class="fas fa-sync-alt"></i> Этот счётчик обновляется автоматически каждый год
+        </div>
+        
+        <footer>
+            <p>Обратный отсчёт до Нового года &copy; <span id="footer-year">2025</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Функция для создания снежинок
+        function createSnowflakes() {
+            const snowflakesContainer = document.getElementById('fireworks');
+            const snowflakeCount = 50;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                snowflake.style.animationDelay = `${Math.random() * 5}s`;
+                snowflake.style.opacity = Math.random() * 0.5 + 0.3;
+                snowflake.style.fontSize = `${Math.random() * 10 + 10}px`;
+                
+                // Анимация падения снежинки
+                const fallAnimation = snowflake.animate([
+                    { transform: 'translateY(0px) rotate(0deg)', opacity: snowflake.style.opacity },
+                    { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 5000,
+                    delay: Math.random() * 5000,
+                    iterations: Infinity
+                });
+                
+                snowflakesContainer.appendChild(snowflake);
+            }
+        }
+
+        // Функция для создания фейерверков
+        function createFireworks() {
+            const fireworksContainer = document.getElementById('fireworks');
+            const fireworkCount = 5;
+            
+            for (let i = 0; i < fireworkCount; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.classList.add('firework');
+                    firework.style.left = `${Math.random() * 100}%`;
+                    firework.style.top = `${Math.random() * 100}%`;
+                    firework.style.backgroundColor = getRandomColor();
+                    firework.style.boxShadow = `0 0 10px 2px ${getRandomColor()}`;
+                    
+                    fireworksContainer.appendChild(firework);
+                    
+                    // Анимация взрыва фейерверка
+                    const explodeAnimation = firework.animate([
+                        { transform: 'scale(1)', opacity: 1 },
+                        { transform: 'scale(20)', opacity: 0 }
+                    ], {
+                        duration: 1000,
+                        easing: 'ease-out'
+                    });
+                    
+                    explodeAnimation.onfinish = () => {
+                        firework.remove();
+                    };
+                }, i * 1000);
+            }
+        }
+
+        function getRandomColor() {
+            const colors = ['#ff5252', '#ff9e00', '#4dabf7', '#40c057', '#be4bdb', '#ff6b6b'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Функция для обновления счётчика
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const nextYear = currentYear + 1;
+            
+            // Устанавливаем текущий и следующий год
+            document.getElementById('current-year').textContent = currentYear;
+            document.getElementById('next-year').textContent = nextYear;
+            document.getElementById('footer-year').textContent = currentYear;
+            
+            // Следующий Новый год
+            const newYear = new Date(nextYear, 0, 1, 0, 0, 0, 0);
+            const timeRemaining = newYear - now;
+            
+            // Если Новый год уже наступил
+            if (timeRemaining <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                document.getElementById('message').textContent = 'С Новым годом! 🎉 Пусть этот год принесёт много счастья и радости!';
+                document.getElementById('year-progress').style.width = '100%';
+                document.getElementById('progress-text').textContent = 'Год завершён на 100%';
+                
+                // Запускаем фейерверки
+                createFireworks();
+                setInterval(createFireworks, 3000);
+                
+                return;
+            }
+            
+            // Вычисляем оставшееся время
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            
+            // Обновляем значения на странице
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // Вычисляем прогресс текущего года
+            const startOfYear = new Date(currentYear, 0, 1, 0, 0, 0, 0);
+            const endOfYear = new Date(nextYear, 0, 1, 0, 0, 0, 0);
+            const yearLength = endOfYear - startOfYear;
+            const yearProgress = (now - startOfYear) / yearLength * 100;
+            
+            // Обновляем прогресс года
+            document.getElementById('year-progress').style.width = `${yearProgress}%`;
+            document.getElementById('progress-text').textContent = `Завершено ${yearProgress.toFixed(2)}% года`;
+            
+            // Обновляем сообщение в зависимости от времени
+            updateMessage(days);
+        }
+
+        // Функция для обновления сообщения
+        function updateMessage(days) {
+            const messageElement = document.getElementById('message');
+            
+            if (days > 60) {
+                messageElement.textContent = "Ещё есть время подготовиться к празднику! Составьте список желаний и планы на следующий год.";
+            } else if (days > 30) {
+                messageElement.textContent = "До Нового года осталось чуть больше месяца! Пора начинать подготовку к празднику.";
+            } else if (days > 14) {
+                messageElement.textContent = "Сколько дней осталось! Не забудьте купить подарки для близких и приготовить праздничный стол.";
+            } else if (days > 7) {
+                messageElement.textContent = "Всего неделя до волшебной ночи! Время украшать дом и создавать праздничное настроение.";
+            } else if (days > 3) {
+                messageElement.textContent = "Совсем скоро! Пора продумывать новогодний наряд и составлять меню для праздничного стола.";
+            } else if (days > 1) {
+                messageElement.textContent = "Почти наступил! Завтра уже канун Нового года. Готовьте бенгальские огни и шампанское!";
+            } else if (days === 1) {
+                messageElement.textContent = "Завтра Новый год! Сегодня последний день текущего года. Проведите его с пользой!";
+            } else {
+                messageElement.textContent = "Сегодня Новый год! Пусть этот день будет полон волшебства, радости и счастливых моментов!";
+            }
+        }
+
+        // Запускаем счётчик при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+            createSnowflakes();
+            
+            // Обновляем счётчик каждую секунду
+            setInterval(updateCountdown, 1000);
+            
+            // Запускаем случайные фейерверки
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    createFireworks();
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
